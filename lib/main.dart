@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart' as loc;
 import 'package:locationapp/auth/login_page.dart';
 import 'package:locationapp/button.dart';
+import 'package:locationapp/drawer.dart';
+import 'package:locationapp/flutter_flow/index.dart';
 
 import 'package:locationapp/mymap.dart';
 import 'package:locationapp/profile_page.dart';
@@ -21,7 +23,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MaterialApp(
-    home: LoginPage(),
+    home: OnboardingWidget(),
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -76,89 +78,201 @@ class _MyAppState extends State<MyApp> {
       onWillPop: () async => false,
       child: SafeArea(
         child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            elevation: 0,
+            title: const Text(
+              "MOVEASY",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 27,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
           backgroundColor: Colors.yellow,
+          drawer: MyDrawer(),
           // appBar: AppBar(
           //   title: Text('live location tracker'),
           // ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              MyButton(
-                  onPressed: () {
-                    _getLocation();
-                  },
-                  text: "add Location"),
-              MyButton(
-                  onPressed: () {
-                    _listenLocation();
-                  },
-                  text: "start tracking"),
-              MyButton(
-                  onPressed: () {
-                    _stopListening();
-                  },
-                  text: "stop tracking"),
+          // drawer: Drawer(
+          //     child: ListView(
+          //   padding: const EdgeInsets.symmetric(vertical: 50),
+          //   children: <Widget>[
+          //     Icon(
+          //       Icons.account_circle,
+          //       size: 150,
+          //       color: Colors.grey[700],
+          //     ),
+          //     const SizedBox(
+          //       height: 15,
+          //     ),
+          //     Text(
+          //       userName,
+          //       textAlign: TextAlign.center,
+          //       style: const TextStyle(fontWeight: FontWeight.bold),
+          //     ),
+          //     const SizedBox(
+          //       height: 30,
+          //     ),
+          //     const Divider(
+          //       height: 2,
+          //     ),
+          //     // ListTile(
+          //     //   onTap: () {
+          //     //     nextScreen(context, MyApp());
+          //     //   },
+          //     //   contentPadding:
+          //     //       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          //     //   leading: const Icon(Icons.group),
+          //     //   title: const Text(
+          //     //     "Groups",
+          //     //     style: TextStyle(color: Colors.black),
+          //     //   ),
+          //     // ),
+          //     ListTile(
+          //       onTap: () {
+          //         nextScreen(context, MyApp());
+          //       },
+          //       selected: true,
+          //       selectedColor: Theme.of(context).primaryColor,
+          //       contentPadding:
+          //           const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          //       leading: const Icon(Icons.group),
+          //       title: const Text(
+          //         "Home Screen",
+          //         style: TextStyle(color: Colors.black),
+          //       ),
+          //     ),
+          //     ListTile(
+          //       onTap: () async {
+          //         showDialog(
+          //             barrierDismissible: false,
+          //             context: context,
+          //             builder: (context) {
+          //               return AlertDialog(
+          //                 title: const Text("Logout"),
+          //                 content:
+          //                     const Text("Are you sure you want to logout?"),
+          //                 actions: [
+          //                   IconButton(
+          //                     onPressed: () {
+          //                       Navigator.pop(context);
+          //                     },
+          //                     icon: const Icon(
+          //                       Icons.cancel,
+          //                       color: Colors.red,
+          //                     ),
+          //                   ),
+          //                   IconButton(
+          //                     onPressed: () async {
+          //                       await authService.signOut();
+          //                       Navigator.of(context).pushAndRemoveUntil(
+          //                           MaterialPageRoute(
+          //                               builder: (context) =>
+          //                                   const LoginPage()),
+          //                           (route) => false);
+          //                     },
+          //                     icon: const Icon(
+          //                       Icons.done,
+          //                       color: Colors.green,
+          //                     ),
+          //                   ),
+          //                 ],
+          //               );
+          //             });
+          //       },
+          //       contentPadding:
+          //           const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          //       leading: const Icon(Icons.exit_to_app),
+          //       title: const Text(
+          //         "Logout",
+          //         style: TextStyle(color: Colors.black),
+          //       ),
+          //     )
+          //   ],
+          // )),
+          body: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MyButton(
+                    onPressed: () {
+                      _getLocation();
+                    },
+                    text: "add Location"),
+                MyButton(
+                    onPressed: () {
+                      _listenLocation();
+                    },
+                    text: "start tracking"),
+                MyButton(
+                    onPressed: () {
+                      _stopListening();
+                    },
+                    text: "stop tracking"),
 
-              TextButton(
-                  onPressed: () {
-                    nextScreenReplace(
-                        context,
-                        ProfilePage(
-                          userName: userName,
-                          email: email,
-                        ));
-                  },
-                  child: Text('about page')),
-              // TextButton(
-              //     onPressed: () {
-              //       _listenLocation();
-              //     },
-              //     child: Text('enable live location')),
-              // TextButton(
-              //     onPressed: () {
-              //       _stopListening();
-              //     },
-              //     child: Text('stop live location')),
-              Expanded(
-                  child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('location')
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  return ListView.builder(
-                      itemCount: snapshot.data?.docs.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(
-                              snapshot.data!.docs[index]['name'].toString()),
-                          subtitle: Row(
-                            children: [
-                              Text(snapshot.data!.docs[index]['latitude']
-                                  .toString()),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text(snapshot.data!.docs[index]['longitude']
-                                  .toString()),
-                            ],
-                          ),
-                          trailing: IconButton(
-                            icon: Icon(Icons.directions),
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      MyMap(snapshot.data!.docs[index].id)));
-                            },
-                          ),
-                        );
-                      });
-                },
-              )),
-            ],
+                // TextButton(
+                //     onPressed: () {
+                //       nextScreenReplace(
+                //           context,
+                //           ProfilePage(
+                //             userName: userName,
+                //             email: email,
+                //           ));
+                //     },
+                //     child: Text('about page')),
+                // Text('data'),
+                // TextButton(
+                //     onPressed: () {
+                //       _listenLocation();
+                //     },
+                //     child: Text('enable live location')),
+                // TextButton(
+                //     onPressed: () {
+                //       _stopListening();
+                //     },
+                //     child: Text('stop live location')),
+                // Expanded(
+                //     child: StreamBuilder(
+                //   stream: FirebaseFirestore.instance
+                //       .collection('location')
+                //       .snapshots(),
+                //   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                //     if (!snapshot.hasData) {
+                //       return Center(child: CircularProgressIndicator());
+                //     }
+                //     return ListView.builder(
+                //         itemCount: snapshot.data?.docs.length,
+                //         itemBuilder: (context, index) {
+                //           return ListTile(
+                //             title: Text(
+                //                 snapshot.data!.docs[index]['name'].toString()),
+                //             subtitle: Row(
+                //               children: [
+                //                 Text(snapshot.data!.docs[index]['latitude']
+                //                     .toString()),
+                //                 SizedBox(
+                //                   width: 20,
+                //                 ),
+                //                 Text(snapshot.data!.docs[index]['longitude']
+                //                     .toString()),
+                //               ],
+                //             ),
+                //             trailing: IconButton(
+                //               icon: Icon(Icons.directions),
+                //               onPressed: () {
+                //                 Navigator.of(context).push(MaterialPageRoute(
+                //                     builder: (context) =>
+                //                         MyMap(snapshot.data!.docs[index].id)));
+                //               },
+                //             ),
+                //           );
+                //         });
+                //   },
+                // )),
+              ],
+            ),
           ),
         ),
       ),

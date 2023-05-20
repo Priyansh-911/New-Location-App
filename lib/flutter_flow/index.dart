@@ -1,0 +1,4 @@
+// Export pages
+// export '/pages/home_page/home_page_widget.dart' show HomePageWidget;
+export '/profile1/profile1_widget.dart' show Profile1Widget;
+export '/onboarding/onboarding_widget.dart' show OnboardingWidget;
