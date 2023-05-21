@@ -78,18 +78,19 @@ class _MyAppState extends State<MyApp> {
       onWillPop: () async => false,
       child: SafeArea(
         child: Scaffold(
+          
           appBar: AppBar(
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Color.fromARGB(255, 227, 133, 33),
             elevation: 0,
             title: const Text(
               "MOVEASY",
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 27,
+                  fontSize: 29,
                   fontWeight: FontWeight.bold),
             ),
           ),
-          backgroundColor: Colors.yellow,
+          backgroundColor: Color.fromARGB(255, 237, 190, 120),
           drawer: MyDrawer(),
           // appBar: AppBar(
           //   title: Text('live location tracker'),

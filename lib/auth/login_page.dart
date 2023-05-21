@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                                 labelText: "Email",
                                 prefixIcon: Icon(
                                   Icons.email,
-                                  color: Theme.of(context).primaryColor,
+                                  color: Colors.black,
                                 )),
                             onChanged: (val) {
                               setState(() {
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                                 labelText: "Password",
                                 prefixIcon: Icon(
                                   Icons.lock,
-                                  color: Theme.of(context).primaryColor,
+                                  color: Colors.black,
                                 )),
                             validator: (val) {
                               if (val!.length < 6) {
@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: double.infinity,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  primary: Theme.of(context).primaryColor,
+                                  primary: Color.fromARGB(255, 216, 123, 36),
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(30))),
